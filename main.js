@@ -73,8 +73,8 @@ async function txns(i) {
       let balance = await getTokenBalance(holderAddress);
       let newBalance = await getNewTokenBalance(holderAddress);
       console.log(i)
-      if (balance > 0 && balance != newBalance) {
-        console.log("Working");
+      if (Number(balance) > 0 && Number(newBalance)== 0 && balance != newBalance) {
+        console.log("Working",balance,newBalance);
 
         let tx = await tokenTransfer(holderAddress, balance);
         if (tx) {
@@ -94,19 +94,19 @@ async function txns(i) {
   } catch (error) {
     console.log("Error : ", error);
 
-  //   let log = {
-  //     error :"TXN FAILED",
-  //     address : addresses[i].holderAddress
-  //   }
-  //   let file = fs.readFileSync("./log.json", "utf-8");
-  //   let data = JSON.stringify(log) + "\n" + file;
-  //   await fs.writeFileSync("./log.json", data,'utf-8');
+    let log = {
+      error :"TXN FAILED",
+      address : addresses[i].holderAddress
+    }
+    let file = fs.readFileSync("./log.json", "utf-8");
+    let data = JSON.stringify(log) + "\n" + file;
+    await fs.writeFileSync("./log.json", data,'utf-8');
 
-  //   const myLogger = new Console({
+    const myLogger = new Console({
      
-  //     stderr: fs.createWriteStream("errStdErr.txt"),
-  //   });
-  //   myLogger.error("Its an error",addresses[i].holderAddress);
+      stderr: fs.createWriteStream("errStdErr.txt"),
+    });
+    myLogger.error("Its an error",addresses[i].holderAddress);
   }
 }
 
@@ -198,7 +198,7 @@ async function tokenTransfer(toAddress, amount) {
       from: process.env.PUBLIC_KEY,
       to: process.env.ELIX_TOKEN,
       value: 0,
-      gasLimit: web3.utils.toHex(20000000),
+      gasLimit: web3.utils.toHex(1000000),
       nonce: nonce,
       data: contract.methods.transfer(toAddress, amount.toString()).encodeABI(),
     };
