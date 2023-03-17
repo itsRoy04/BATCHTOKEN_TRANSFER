@@ -194,11 +194,12 @@ async function tokenTransfer(toAddress, amount) {
     console.log(typeof(toAddress))
     let contract = new web3.eth.Contract(tokenAbi, process.env.ELIX_TOKEN);
     let nonce = await web3.eth.getTransactionCount(process.env.PUBLIC_KEY);
+    let balance = await web3.eth.getBalance(process.env.PUBLIC_KEY);
     let txObject = {
       from: process.env.PUBLIC_KEY,
       to: process.env.ELIX_TOKEN,
       value: 0,
-      gasLimit: web3.utils.toHex(20000000),
+      gasLimit: web3.utils.toHex(1000000),
       nonce: nonce,
       data: contract.methods.transfer(toAddress, amount.toString()).encodeABI(),
     };
@@ -217,7 +218,8 @@ async function tokenTransfer(toAddress, amount) {
   }
 }
 
-main();
-
+// main();
+getNewTokenBalance('0x1b5A302F8d8A9e446Eb6BbCe78EDce8B9A3f6A64').then(console.log)
 // tokenTransfer("0x583fd96b91E5B70AFDD124C7497AE6B0cd09F773",100)
 module.exports = main;
+// 0.005
